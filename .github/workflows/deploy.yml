@@ -1,4 +1,4 @@
-name: Deploy to FTP (no SSL)
+name: Deploy to FTP (Konoba Brešić)
 
 on:
   push:
@@ -14,16 +14,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Deploy via FTP (no SSL)
+      - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: 21
-          protocol: ftp
-          local-dir: ./  # ako je tvoj projekt u podmapi, promijeni npr. na ./konoba-bresic/
-          server-dir: /public_html/  # promijeni prema strukturi tvog hostinga
+          protocol: ftp   # klasični FTP bez SSL
+          local-dir: ./   # lokalni direktorij koji će se slati
+          server-dir: /   # root, jer tvoj user ima pristup direktno tamo
           exclude: |
             **/.git*
             **/.github*

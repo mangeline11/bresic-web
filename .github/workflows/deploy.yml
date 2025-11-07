@@ -1,0 +1,31 @@
+name: Deploy to FTP (no SSL)
+
+on:
+  push:
+    branches:
+      - main  # pokreće se kada push-aš na main granu
+
+jobs:
+  ftp-deploy:
+    name: Upload to FTP server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy via FTP (no SSL)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 21
+          protocol: ftp
+          local-dir: ./  # ako je tvoj projekt u podmapi, promijeni npr. na ./konoba-bresic/
+          server-dir: /public_html/  # promijeni prema strukturi tvog hostinga
+          exclude: |
+            **/.git*
+            **/.github*
+            **/node_modules/**
+            **/.DS_Store

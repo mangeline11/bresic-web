@@ -21,4 +21,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Funkcionalnost za filtriranje jelovnika
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const menuItems = document.querySelectorAll('.menu-item-filterable');
+
+    if (filterButtons.length > 0 && menuItems.length > 0) {
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Uklanjanje 'active' klase sa svih gumba i dodavanje na kliknuti
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const filter = button.dataset.filter;
+
+                menuItems.forEach(item => {
+                    if (filter === 'all' || item.dataset.category === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+    }
+
 });

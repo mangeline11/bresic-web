@@ -13,16 +13,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message = trim($_POST["message"]);
     $captcha_input = trim($_POST["captcha"]);
 
-    // 2. Validacija CAPTCHA
-    $expected_captcha = $_SESSION['captcha_num1'] + $_SESSION['captcha_num2'];
-
-    if ($captcha_input != $expected_captcha) {
+    // 2. Validacija slikovne CAPTCHA (case-insensitive)
+    if (!isset($_SESSION['captcha_text']) || strtolower($captcha_input) != strtolower($_SESSION['captcha_text'])) {
         // Ako CAPTCHA nije točna, postavi poruku o grešci i preusmjeri
-        $_SESSION['form_message'] = "Sigurnosno pitanje nije točno. Molimo pokušajte ponovno.";
+        $_SESSION['form_message'] = "Uneseni tekst sa slike nije točan. Molimo pokušajte ponovno.";
         $_SESSION['form_status'] = "error";
         header("Location: kontakt.php");
         exit;
     }
+    // Uklanjanje CAPTCHA teksta iz sesije nakon provjere
+    unset($_SESSION['captcha_text']);
 
     // 3. Validacija ostalih polja
     if (empty($name) || empty($message) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
